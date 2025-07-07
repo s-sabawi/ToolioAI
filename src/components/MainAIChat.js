@@ -1,0 +1,1 @@
+// MainAIChat.js placeholder

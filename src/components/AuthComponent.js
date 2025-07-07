@@ -1,0 +1,1 @@
+// AuthComponent.js placeholder
