@@ -291,9 +291,19 @@ function App() {
     );
   }
 
-  if (!user) {
-    return <AuthComponent supabase={supabase} />;
-  }
+  // TEMPORARILY BYPASSING AUTHENTICATION FOR DEMO
+  // Set a mock user for demo purposes when no real user is authenticated
+  const demoUser = user || {
+    id: 'demo-user-123',
+    email: 'demo@tradeflowai.com',
+    user_metadata: {
+      full_name: 'Demo User'
+    }
+  };
+  
+  // if (!user) {
+  //   return <AuthComponent supabase={supabase} />;
+  // }
 
   const renderCurrentView = () => {
     switch (currentView) {
@@ -354,7 +364,7 @@ function App() {
         <Navigation 
           currentView={currentView}
           setCurrentView={setCurrentView}
-          user={user}
+          user={demoUser}
           supabase={supabase}
           businessData={businessData}
         />
