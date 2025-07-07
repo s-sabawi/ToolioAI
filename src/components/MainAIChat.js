@@ -257,3 +257,38 @@ const MainAIChat = ({ businessData, callAITool, dbOperations, supabase }) => {
       <div className="flex items-center gap-3 flex-1">
         <button className="p-1 md:hidden">
           <svg className="w-6 h-6 text-zinc-400" fill="none" stroke
+
+  return (
+    <div className="flex flex-col h-full bg-zinc-900">
+      <StatusBar />
+      <Header />
+      {/* Add your chat UI here, e.g. message list, input, etc. */}
+      <div className="flex-1 overflow-y-auto p-4">
+        {messages.map((msg) => (
+          <div key={msg.id} className={`mb-2 ${msg.type === 'user' ? 'text-right' : 'text-left'}`}>{msg.content}</div>
+        ))}
+        <div ref={messagesEndRef} />
+      </div>
+      <div className="p-4 border-t border-zinc-700 bg-zinc-800 flex items-center">
+        <textarea
+          className="flex-1 bg-zinc-900 text-white rounded p-2 mr-2 resize-none"
+          rows={1}
+          value={inputValue}
+          onChange={e => setInputValue(e.target.value)}
+          onKeyDown={handleKeyPress}
+          placeholder="Type your message..."
+          disabled={isLoading}
+        />
+        <button
+          className="bg-blue-600 text-white px-4 py-2 rounded disabled:opacity-50"
+          onClick={handleSendMessage}
+          disabled={isLoading || !inputValue.trim()}
+        >
+          {isLoading ? 'Sending...' : 'Send'}
+        </button>
+      </div>
+    </div>
+  );
+};
+
+export default MainAIChat;
