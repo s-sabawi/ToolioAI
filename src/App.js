@@ -10,10 +10,16 @@ import AuthComponent from './components/AuthComponent';
 import Navigation from './components/Navigation';
 import './App.css';
 
-// Initialize Supabase client
+// Initialize Supabase client with error handling
 const supabaseUrl = process.env.REACT_APP_SUPABASE_URL;
 const supabaseKey = process.env.REACT_APP_SUPABASE_ANON_KEY;
-const supabase = createClient(supabaseUrl, supabaseKey);
+
+let supabase = null;
+if (supabaseUrl && supabaseKey) {
+  supabase = createClient(supabaseUrl, supabaseKey);
+} else {
+  console.warn('Supabase credentials not found. App will run in demo mode.');
+}
 
 function App() {
   const [user, setUser] = useState(null);
@@ -25,13 +31,24 @@ function App() {
     communications: []
   });
   const [loading, setLoading] = useState(true);
+  const [supabaseError, setSupabaseError] = useState(!supabaseUrl || !supabaseKey);
 
   // Check authentication status
   useEffect(() => {
-    const getSession = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
-      setUser(session?.user || null);
+    if (!supabase) {
       setLoading(false);
+      return;
+    }
+
+    const getSession = async () => {
+      try {
+        const { data: { session } } = await supabase.auth.getSession();
+        setUser(session?.user || null);
+        setLoading(false);
+      } catch (error) {
+        console.error('Supabase auth error:', error);
+        setLoading(false);
+      }
     };
 
     getSession();
@@ -48,12 +65,14 @@ function App() {
 
   // Load business data when user is authenticated
   useEffect(() => {
-    if (user) {
+    if (user && supabase) {
       loadBusinessData();
     }
   }, [user]);
 
   const loadBusinessData = async () => {
+    if (!supabase) return;
+    
     try {
       const [jobsRes, clientsRes, invoicesRes, commsRes] = await Promise.all([
         supabase.from('jobs').select(`
@@ -239,6 +258,27 @@ function App() {
     return (
       <div className="flex items-center justify-center min-h-screen bg-zinc-900">
         <div className="text-white">Loading TradeFlowAI...</div>
+      </div>
+    );
+  }
+
+  // Show error if Supabase is not configured
+  if (supabaseError) {
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-zinc-900">
+        <div className="text-white text-center max-w-md mx-auto p-6">
+          <h1 className="text-2xl font-bold mb-4">Configuration Required</h1>
+          <p className="mb-4">
+            Supabase environment variables are not configured. Please add the following to your Vercel environment variables:
+          </p>
+          <div className="bg-gray-800 p-4 rounded mb-4 text-sm">
+            <p><strong>REACT_APP_SUPABASE_URL</strong></p>
+            <p><strong>REACT_APP_SUPABASE_ANON_KEY</strong></p>
+          </div>
+          <p className="text-sm text-gray-400">
+            Get these from your Supabase project settings.
+          </p>
+        </div>
       </div>
     );
   }
