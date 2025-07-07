@@ -2,8 +2,8 @@ import React from 'react';
 
 const AuthComponent = ({ user, supabase }) => {
   const handleSignIn = async () => {
-    // Implement sign in logic
-    console.log('Sign in clicked');
+    const { error } = await supabase.auth.signInWithOAuth({ provider: 'google' });
+    if (error) alert(error.message);
   };
 
   const handleSignOut = async () => {
@@ -20,7 +20,7 @@ const AuthComponent = ({ user, supabase }) => {
       ) : (
         <div>
           <p>Please sign in to continue</p>
-          <button onClick={handleSignIn}>Sign In</button>
+          <button onClick={handleSignIn}>Sign In with Google</button>
         </div>
       )}
     </div>
