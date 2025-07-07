@@ -286,7 +286,7 @@ const MainAIChat = ({ businessData, callAITool, dbOperations, supabase }) => {
         >
           {isLoading ? 'Sending...' : 'Send'}
         </button>
-      </div>
+        </div>
     </div>
   );
 };
