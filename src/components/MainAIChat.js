@@ -256,7 +256,12 @@ const MainAIChat = ({ businessData, callAITool, dbOperations, supabase }) => {
     <div className="flex items-center justify-between px-4 py-3 bg-zinc-800 border-b border-zinc-700">
       <div className="flex items-center gap-3 flex-1">
         <button className="p-1 md:hidden">
-          <svg className="w-6 h-6 text-zinc-400" fill="none" stroke
+          <svg className="w-6 h-6 text-zinc-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" /></svg>
+        </button>
+        <span className="text-lg font-semibold text-white">AI Assistant</span>
+      </div>
+    </div>
+  );
 
   return (
     <div className="flex flex-col h-full bg-zinc-900">
@@ -286,7 +291,7 @@ const MainAIChat = ({ businessData, callAITool, dbOperations, supabase }) => {
         >
           {isLoading ? 'Sending...' : 'Send'}
         </button>
-        </div>
+      </div>
     </div>
   );
 };
