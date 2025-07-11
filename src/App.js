@@ -370,8 +370,10 @@ function App() {
         />
         
         {/* Main Content */}
-        <main className="flex-1 md:ml-64">
-          {renderCurrentView()}
+        <main className="flex-1 md:ml-64 w-full">
+          <div className="w-full h-full">
+            {renderCurrentView()}
+          </div>
         </main>
       </div>
     </div>
